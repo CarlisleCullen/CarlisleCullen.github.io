@@ -288,7 +288,7 @@
 <figure class="highlight protobuf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">enum</span> <span class="title">EnumAllowingAlias</span> </span>&#123;</span><br><span class="line">    <span class="keyword">option</span> allow_alias = <span class="literal">true</span>;</span><br><span class="line">    UNKNOWN = <span class="number">0</span>;</span><br><span class="line">    STARTED = <span class="number">1</span>;</span><br><span class="line">    RUNNING = <span class="number">1</span>;</span><br><span class="line">&#125;<span class="number">123456</span></span><br></pre></td></tr></table></figure>
 
 <p>枚举值的范围是32-bit integer，但因为枚举值使用变长编码，所以不推荐使用负数作为枚举值，因为这会带来效率问题。</p>
-<h4 id="如何引用其他-proto-文件"><a href="#如何引用其他-proto-文件" class="headerlink" title="如何引用其他 proto 文件"></a>如何引用其他 proto 文件</h4><p>在proto语法中，有两种引用其他 proto 文件的方法： <code>import</code> 和 <code>import public</code>，这两者有什么区别呢？下面举个例子说明：<br><img src="import%E6%83%85%E6%99%AF.png" alt="引用其他 proto 文件"></p>
+<h4 id="如何引用其他-proto-文件"><a href="#如何引用其他-proto-文件" class="headerlink" title="如何引用其他 proto 文件"></a>如何引用其他 proto 文件</h4><p>在proto语法中，有两种引用其他 proto 文件的方法： <code>import</code> 和 <code>import public</code>，这两者有什么区别呢？下面举个例子说明：<br><img src="/images/import%E6%83%85%E6%99%AF.png" alt="引用其他 proto 文件"></p>
 <ul>
 <li>在情景1中， my.proto <strong>不能</strong>使用 second.proto 中定义的内容</li>
 <li>在情景2中， my.proto <strong>可以</strong>使用 second.proto 中定义的内容</li>
