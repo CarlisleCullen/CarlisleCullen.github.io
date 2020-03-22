@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  <entry>
+    <title>Protocol Buffer学习笔记</title>
+    <url>/2020/03/15/Protocol%20Buffer%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</url>
+    <content><![CDATA[<h2 id="Protocol-Buffer学习笔记"><a href="#Protocol-Buffer学习笔记" class="headerlink" title="Protocol Buffer学习笔记"></a>Protocol Buffer学习笔记</h2><h3 id="1、前言："><a href="#1、前言：" class="headerlink" title="1、前言："></a>1、前言：</h3><blockquote>
+<p>笔记所述的为使用windows环境，使用intellj idea做为java的IDE，使用Maven构建项目</p>
+<h4 id="引用百度百科的解释："><a href="#引用百度百科的解释：" class="headerlink" title="引用百度百科的解释："></a>引用百度百科的解释：</h4><p><strong>protocolbuffer</strong>(以下简称PB)是google 的一种<strong><em>数据交换的格式</em></strong>，它独立于语言，独立于平台。google 提供了多种语言的实现：java、c#、c++、go 和 python，每一种实现都包含了相应语言的编译器以及库文件。由于它是一种二进制的格式，比使用 xml 进行数据交换快许多。可以把它用于分布式应用之间的数据通信或者异构环境下的数据交换。作为一种效率和兼容性都很优秀的二进制数据传输格式，可以用于诸如网络传输、配置文件、数据存储等诸多领域。</p>
+</blockquote>
+<a id="more"></a>
+
+<p><img src="/images/ProtocolBuffer%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/PB%E4%BD%BF%E7%94%A8%E6%B5%81%E7%A8%8B%E8%AF%B4%E6%98%8E.png" alt=""></p>
+<h3 id="2、准备工作："><a href="#2、准备工作：" class="headerlink" title="2、准备工作："></a>2、准备工作：</h3><h4 id="1-引入maven依赖"><a href="#1-引入maven依赖" class="headerlink" title="1) 引入maven依赖"></a>1) 引入maven依赖</h4><figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.google.protobuf<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>protobuf-java<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.6.0<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="2-配置参数"><a href="#2-配置参数" class="headerlink" title="2) 配置参数"></a>2) 配置参数</h4><figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">build</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">plugins</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">plugin</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.xolstice.maven.plugins<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>protobuf-maven-plugin<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">version</span>&gt;</span>0.5.0<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">executions</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">execution</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">goals</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">goal</span>&gt;</span>compile<span class="tag">&lt;/<span class="name">goal</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">goal</span>&gt;</span>test-compile<span class="tag">&lt;/<span class="name">goal</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;/<span class="name">goals</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;/<span class="name">execution</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">executions</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">plugin</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">plugins</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">build</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>说明：以上内容写在需要引入PB支持的POM文件中。</p>
+</blockquote>
+<h4 id="3-下载idea关于PB的插件：ProtoBuf-Support"><a href="#3-下载idea关于PB的插件：ProtoBuf-Support" class="headerlink" title="3) 下载idea关于PB的插件：ProtoBuf Support"></a>3) 下载idea关于PB的插件：ProtoBuf Support</h4><p>   下载plugin，这样在使用的时候protocol buffer语法可以高亮显示，也可以智能提示语法错误。</p>
+<h3 id="3、Java中使用Protocol-Buffer的demo："><a href="#3、Java中使用Protocol-Buffer的demo：" class="headerlink" title="3、Java中使用Protocol Buffer的demo："></a>3、Java中使用Protocol Buffer的demo：</h3><h4 id="1-demo如下："><a href="#1-demo如下：" class="headerlink" title="1) demo如下："></a>1) demo如下：</h4><blockquote>
+<p>StudentMsg.proto文件内容如下</p>
+</blockquote>
+<figure class="highlight protobuf"><table><tr><td class="code"><pre><span class="line">syntax = <span class="string">"proto2"</span>;</span><br><span class="line"><span class="keyword">package</span> com.haiyi.tca.dto;</span><br><span class="line"><span class="keyword">option</span> java_outer_classname=<span class="string">"StudentMsg"</span>;</span><br><span class="line"><span class="class"><span class="keyword">message</span> <span class="title">Student</span></span>&#123;</span><br><span class="line">    <span class="keyword">required</span> <span class="built_in">string</span> name = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">required</span> <span class="built_in">int32</span> age = <span class="number">2</span>;</span><br><span class="line">    <span class="keyword">required</span> <span class="built_in">double</span> height = <span class="number">3</span>;</span><br><span class="line">    <span class="keyword">required</span> <span class="built_in">double</span> weight = <span class="number">4</span>;</span><br><span class="line">    <span class="keyword">optional</span> <span class="built_in">string</span> tel = <span class="number">5</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong><em>以上例子中：</em></strong></p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   <strong><em>syntax</em></strong>指定了使用PB的哪个版本的语法（此demo使用的是protocol2）。protocol2和protocol3的语法区别见：</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   <strong><em>package</em></strong>内容指定了在编译的时候将转换的class文件输出到什么包的什么位置。</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   <strong><em>option</em></strong>参数指定了输出的Java类名，即为JavaBean的名字。</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   <strong><em>message</em></strong>中的内容为结构体，里面的数据遵循Protocol Buffer的语法格式。</p>
+<p><strong>编译前的必要工作：</strong></p>
+<p>在编译为class文件之前需要将编译器配置好，最佳单的方式就是将protoc.exe文件放到java的bin文件夹中。</p>
+<p><strong>编译为java的class文件：</strong></p>
+<p>使用指令：<em>mvn clean install</em>进行编译，编译通过后，定义的.proto结构将会编译为.class文件，传输数据的格式为二进制文件。</p>
+<h4 id="2-序列化数据："><a href="#2-序列化数据：" class="headerlink" title="2) 序列化数据："></a>2) 序列化数据：</h4><p>在可访问权限的包中进行测试，<strong><em>序列化</em></strong>代码如下（Encoding）：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 测试序列化代码</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testProtocol</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="comment">//构建序列化对象</span></span><br><span class="line">    <span class="keyword">final</span> StudentMsg.Student.Builder builder = StudentMsg.Student.newBuilder();</span><br><span class="line">    <span class="comment">//开始构建数据入对象</span></span><br><span class="line">    StudentMsg.Student student = builder.setAge(<span class="number">15</span>)</span><br><span class="line">            .setHeight(<span class="number">175.7</span>)</span><br><span class="line">            .setName(<span class="string">"朱测测"</span>)</span><br><span class="line">            .setTel(<span class="string">"15349850000"</span>)</span><br><span class="line">            .setWeight(<span class="number">60.5</span>).build();</span><br><span class="line">    <span class="comment">//此时已经完成了按照定义的数据结构将数据序列化操作，以下打印到控制台</span></span><br><span class="line">    <span class="comment">//将数据对象转化为byte数组</span></span><br><span class="line">    <span class="keyword">byte</span>[] dataBytes = student.toByteArray();</span><br><span class="line">    <span class="comment">//将byte数组遍历出来</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">byte</span> dataByte : dataBytes) &#123;</span><br><span class="line">        System.out.print(dataByte);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>打印到控制台结果如下：</p>
+<hr>
+<p>109-26-100-79-26-75-117-26-75-117161525102102102102102-1010164330000064786442114953515257565348484848</p>
+<hr>
+<p><strong><em>反序列化</em></strong>代码如下（Decoding）：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 测试反序列化代码</span></span><br><span class="line"><span class="comment"> * 序列化操作见上一步，这里使用的dataBytes数据为序列化时的数据：</span></span><br><span class="line"><span class="comment"> * byte[] dataBytes = student.toByteArray();</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testDeProtocol</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="keyword">final</span> StudentMsg.Student student1 = StudentMsg.Student.parseFrom(dataBytes);</span><br><span class="line">        System.out.println(student1);</span><br><span class="line">    &#125; <span class="keyword">catch</span> (InvalidProtocolBufferException e) &#123;</span><br><span class="line">        e.printStackTrace();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>打印到控制台结果如下：</p>
+<hr>
+<p>name: “\346\234\261\346\265\213\346\265\213”<br>age: 15<br>height: 175.7<br>weight: 60.5<br>tel: “15349850000”</p>
+<hr>
+<p><strong><em>注意：*</em></strong>以上结果可见，直接println对象的时候将会出现name未经转义的现象，在通过对象getName()的操作可以打印出utf-8的中文内容。所以当值为中文时，直接打印对象存在获取对象值异常的情况。*</p>
+<h3 id="4、不得不提的注意事项："><a href="#4、不得不提的注意事项：" class="headerlink" title="4、不得不提的注意事项："></a>4、不得不提的注意事项：</h3><p>在写.proto文件时，将proto文件的目录设置为与java源和resource目录同一级，不需要将此package标记为源目录。</p>
+<h3 id="5、举几个栗子："><a href="#5、举几个栗子：" class="headerlink" title="5、举几个栗子："></a>5、举几个栗子：</h3><h4 id="1-一个最基础的简单的消息例子："><a href="#1-一个最基础的简单的消息例子：" class="headerlink" title="1) 一个最基础的简单的消息例子："></a>1) 一个最基础的简单的消息例子：</h4><figure class="highlight protobuf"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 指定使用proto3，如果不指定的话，编译器会使用proto2去编译</span></span><br><span class="line">syntax = <span class="string">"proto3"</span>; <span class="comment">//[proto2|proto3]</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">message</span> <span class="title">SearchRequests</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 定义SearchRequests的成员变量，需要指定：变量类型、变量名、变量Tag</span></span><br><span class="line">    <span class="built_in">string</span> query = <span class="number">1</span>;</span><br><span class="line">    <span class="built_in">int32</span> page_number = <span class="number">2</span>;</span><br><span class="line">    <span class="built_in">int32</span> result_per_page = <span class="number">3</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="2-一个结构体包含数个message的例子："><a href="#2-一个结构体包含数个message的例子：" class="headerlink" title="2) 一个结构体包含数个message的例子："></a>2) 一个结构体包含数个message的例子：</h4><figure class="highlight protobuf"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">message</span> <span class="title">SearchRequest</span> </span>&#123;</span><br><span class="line">    <span class="built_in">string</span> query = <span class="number">1</span>;</span><br><span class="line">    <span class="built_in">int32</span> page_number = <span class="number">2</span>;</span><br><span class="line">    <span class="built_in">int32</span> result_per_page = <span class="number">3</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">message</span> <span class="title">SearchResponse</span> </span>&#123;</span><br><span class="line">    <span class="keyword">repeated</span> <span class="built_in">string</span> result = <span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="3-结构体中含嵌套消息的例子："><a href="#3-结构体中含嵌套消息的例子：" class="headerlink" title="3) 结构体中含嵌套消息的例子："></a>3) 结构体中含嵌套消息的例子：</h4><figure class="highlight protobuf"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">message</span> <span class="title">SearchResponse</span> </span>&#123;</span><br><span class="line">    <span class="class"><span class="keyword">message</span> <span class="title">Result</span> </span>&#123;</span><br><span class="line">        <span class="built_in">string</span> url = <span class="number">1</span>;</span><br><span class="line">        <span class="built_in">string</span> title = <span class="number">2</span>;</span><br><span class="line">        <span class="keyword">repeated</span> <span class="built_in">string</span> snippets = <span class="number">3</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">repeated</span> Result results = <span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="4-定义在-message-内部的-message的例子："><a href="#4-定义在-message-内部的-message的例子：" class="headerlink" title="4) 定义在 message 内部的 message的例子："></a>4) 定义在 message 内部的 message的例子：</h4><figure class="highlight protobuf"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">message</span> <span class="title">SomeOtherMessage</span> </span>&#123;</span><br><span class="line">    SearchResponse.Result result = <span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="5-含有枚举的-message的例子："><a href="#5-含有枚举的-message的例子：" class="headerlink" title="5) 含有枚举的 message的例子："></a>5) 含有枚举的 message的例子：</h4><figure class="highlight protobuf"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">message</span> <span class="title">SearchRequest</span> </span>&#123;</span><br><span class="line">    <span class="built_in">string</span> query = <span class="number">1</span>;</span><br><span class="line">    <span class="built_in">int32</span> page_number = <span class="number">2</span>; <span class="comment">// Which page number do we want</span></span><br><span class="line">    <span class="built_in">int32</span> result_per_page = <span class="number">3</span>; <span class="comment">// Number of results to return per page</span></span><br><span class="line">    <span class="class"><span class="keyword">enum</span> <span class="title">Corpus</span> </span>&#123;</span><br><span class="line">        UNIVERSAL = <span class="number">0</span>;</span><br><span class="line">        WEB = <span class="number">1</span>;</span><br><span class="line">        IMAGES = <span class="number">2</span>;</span><br><span class="line">        LOCAL = <span class="number">3</span>;</span><br><span class="line">        NEWS = <span class="number">4</span>;</span><br><span class="line">        PRODUCTS = <span class="number">5</span>;</span><br><span class="line">        VIDEO = <span class="number">6</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    Corpus corpus = <span class="number">4</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="6、Proto语法规则"><a href="#6、Proto语法规则" class="headerlink" title="6、Proto语法规则"></a>6、Proto语法规则</h3><p><a href="https://blog.csdn.net/shensky711/article/details/69696392" target="_blank" rel="noopener" title="include">摘自网络，以下内容供查阅使用</a></p>
+<h4 id="1-指定变量规则"><a href="#1-指定变量规则" class="headerlink" title="1) 指定变量规则"></a>1) 指定变量规则</h4><p>在 proto3 中，可以给变量指定以下两个规则：</p>
+<ul>
+<li><code>singular</code>：0或者1个，但不能多于1个</li>
+<li><code>repeated</code>：任意数量（包括0）</li>
+</ul>
+<p>当构建 message 的时候，build 数据的时候，会检测设置的数据跟规则是否匹配</p>
+<p>在proto2中，规则为：</p>
+<ul>
+<li>required：必须有一个</li>
+<li>optional：0或者1个</li>
+<li>repeated：任意数量（包括0）</li>
+</ul>
+<h4 id="2-定义变量类型："><a href="#2-定义变量类型：" class="headerlink" title="2) 定义变量类型："></a>2) 定义变量类型：</h4><table>
+<thead>
+<tr>
+<th align="center">.proto</th>
+<th>说明</th>
+<th>Java</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">double</td>
+<td></td>
+<td>double</td>
+</tr>
+<tr>
+<td align="center">float</td>
+<td></td>
+<td>float</td>
+</tr>
+<tr>
+<td align="center">int32</td>
+<td>使用变长编码，对负数编码效率低，如变量可能是负数，可使用sint32</td>
+<td>int</td>
+</tr>
+<tr>
+<td align="center">int64</td>
+<td>使用变长编码，对负数编码效率低，如变量可能是负数，可使用sint64</td>
+<td>long</td>
+</tr>
+<tr>
+<td align="center">uint32</td>
+<td>使用变长编码</td>
+<td>int</td>
+</tr>
+<tr>
+<td align="center">uint64</td>
+<td>使用变长编码</td>
+<td>long</td>
+</tr>
+<tr>
+<td align="center">sint32</td>
+<td>使用变长编码，带符号的int类型，对负数编码比int32高效</td>
+<td>int</td>
+</tr>
+<tr>
+<td align="center">sint64</td>
+<td>使用变长编码，带符号的int类型，对负数编码比int64高效</td>
+<td>long</td>
+</tr>
+<tr>
+<td align="center">fixed32</td>
+<td>4字节编码， 如果变量经常大于228228的话，会比uint32高效</td>
+<td>int</td>
+</tr>
+<tr>
+<td align="center">fixed64</td>
+<td>8字节编码， 如果变量经常大于256256的话，会比uint64高效</td>
+<td>long</td>
+</tr>
+<tr>
+<td align="center">sfixed32</td>
+<td>4字节编码</td>
+<td>int</td>
+</tr>
+<tr>
+<td align="center">sfixed64</td>
+<td>8字节编码</td>
+<td>long</td>
+</tr>
+<tr>
+<td align="center">bool</td>
+<td></td>
+<td>boolean</td>
+</tr>
+<tr>
+<td align="center">string</td>
+<td>必须包含utf-8编码或者7-bit ASCII text</td>
+<td>String</td>
+</tr>
+<tr>
+<td align="center">bytes</td>
+<td>任意的字节序列</td>
+<td>ByteString</td>
+</tr>
+</tbody></table>
+<h5 id="补充："><a href="#补充：" class="headerlink" title="补充："></a>补充：</h5><p>1、在java中无符号的32位和无符号的64位整型通过将首位作为符号位，再使用与之对应的有符号数表示。</p>
+<p>2、在设置值的过程中会进行类型检查以确保数据合法。</p>
+<p>3、整型使用64位进行匹配，字符串使用32位进行匹配。</p>
+<h4 id="3-分配Tag"><a href="#3-分配Tag" class="headerlink" title="3) 分配Tag"></a>3) 分配Tag</h4><p>每一个变量在message内都需要自定义一个<strong>唯一的数字Tag</strong>，protobuf会根据Tag从数据中查找变量对应的位置，具体原理跟protobuf的二进制数据格式有关。Tag一旦指定，以后更新协议的时候也不能修改，否则无法对旧版本兼容。</p>
+<p>Tag的取值范围最小是1，最大是229229-1，但 19000~19999 是 protobuf 预留的，用户不能使用。</p>
+<p>虽然 Tag 的定义范围比较大，但不同 Tag 也会对 protobuf 编码带来一些影响：</p>
+<ul>
+<li>1 ~ 15：单字节编码</li>
+<li>16 ~ 2047：双字节编码</li>
+</ul>
+<p>使用频率高的变量最好设置为1 ~ 15，这样可以减少编码后的数据大小，但由于Tag一旦指定不能修改，所以为了以后扩展，也记得为未来保留一些 1 ~ 15 的 Tag。</p>
+<h4 id="4-保留变量不被使用"><a href="#4-保留变量不被使用" class="headerlink" title="4) 保留变量不被使用"></a>4) 保留变量不被使用</h4><p>一旦 Tag 指定后就不能变更，这就会带来一个问题，假如在版本1的协议中，我们有个变量：</p>
+<figure class="highlight protobuf"><table><tr><td class="code"><pre><span class="line"><span class="built_in">int32</span> number = <span class="number">1</span>；</span><br></pre></td></tr></table></figure>
+
+<p>在版本2中，我们决定废弃对它的使用，那我们应该如何修改协议呢？注释掉它？删除掉它？如果把它删除了，后来者很可能在定义新变量的时候，使新的变量 Tag = 1 ，这样会导致协议不兼容。那有没有办法规避这个问题呢？我们可以用 <code>reserved</code> 关键字，当一个变量不再使用的时候，我们可以把它的变量名或 Tag 用 <code>reserved</code> 标注，这样，当这个 Tag 或者变量名字被重新使用的时候，编译器会报错</p>
+<figure class="highlight protobuf"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">message</span> <span class="title">Foo</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 注意，同一个 reserved 语句不能同时包含变量名和 Tag </span></span><br><span class="line">    reserved <span class="number">2</span>, <span class="number">15</span>, <span class="number">9</span> to <span class="number">11</span>;</span><br><span class="line">    reserved <span class="string">"foo"</span>, <span class="string">"bar"</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="5-默认值"><a href="#5-默认值" class="headerlink" title="5) 默认值"></a>5) 默认值</h4><p>当解析 message 时，如果被编码的 message 里没有包含某些变量，那么根据类型不同，他们会有不同的默认值：</p>
+<ul>
+<li>string：默认是空的字符串</li>
+<li>byte：默认是空的bytes</li>
+<li>bool：默认为false</li>
+<li>numeric：默认为0</li>
+<li>enums：定义在第一位的枚举值，也就是0</li>
+<li>messages：根据生成的不同语言有不同的表现，参考<a href="https://developers.google.com/protocol-buffers/docs/reference/overview" target="_blank" rel="noopener">generated code guide</a></li>
+</ul>
+<p>注意，收到数据后反序列化后，对于标准值类型的数据，比如bool，如果它的值是 false，那么我们无法判断这个值是对方设置的，还是对方压根就没给这个变量设置值。</p>
+<h4 id="6-定义枚举-Enumerations"><a href="#6-定义枚举-Enumerations" class="headerlink" title="6) 定义枚举 Enumerations"></a>6) 定义枚举 Enumerations</h4><p>在 protobuf 中，我们也可以定义枚举，并且使用该枚举类型，比如：</p>
+<figure class="highlight protobuf"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">message</span> <span class="title">SearchRequest</span> </span>&#123;</span><br><span class="line">    <span class="built_in">string</span> query = <span class="number">1</span>;</span><br><span class="line">    <span class="built_in">int32</span> page_number = <span class="number">2</span>; <span class="comment">// Which page number do we want</span></span><br><span class="line">    <span class="built_in">int32</span> result_per_page = <span class="number">3</span>; <span class="comment">// Number of results to return per page</span></span><br><span class="line">    <span class="class"><span class="keyword">enum</span> <span class="title">Corpus</span> </span>&#123;</span><br><span class="line">        UNIVERSAL = <span class="number">0</span>;</span><br><span class="line">        WEB = <span class="number">1</span>;</span><br><span class="line">        IMAGES = <span class="number">2</span>;</span><br><span class="line">        LOCAL = <span class="number">3</span>;</span><br><span class="line">        NEWS = <span class="number">4</span>;</span><br><span class="line">        PRODUCTS = <span class="number">5</span>;</span><br><span class="line">        VIDEO = <span class="number">6</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    Corpus corpus = <span class="number">4</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>枚举定义在一个消息内部或消息外部都是可以的，如果枚举是 定义在 message 内部，而其他 message 又想使用，那么可以通过 <code>MessageType.EnumType</code> 的方式引用。定义枚举的时候，我们要保证<strong>第一个枚举值必须是0</strong>，枚举值不能重复，除非使用 <code>option allow_alias = true</code> 选项来开启别名。如：</p>
+<figure class="highlight protobuf"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">enum</span> <span class="title">EnumAllowingAlias</span> </span>&#123;</span><br><span class="line">    <span class="keyword">option</span> allow_alias = <span class="literal">true</span>;</span><br><span class="line">    UNKNOWN = <span class="number">0</span>;</span><br><span class="line">    STARTED = <span class="number">1</span>;</span><br><span class="line">    RUNNING = <span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>枚举值的范围是32-bit integer，但因为枚举值使用变长编码，所以不推荐使用负数作为枚举值，因为这会带来效率问题。</p>
+<h4 id="7-如何引用其他-proto-文件"><a href="#7-如何引用其他-proto-文件" class="headerlink" title="7) 如何引用其他 proto 文件"></a>7) 如何引用其他 proto 文件</h4><p>在proto语法中，有两种引用其他 proto 文件的方法： <code>import</code> 和 <code>import public</code>，这两者有什么区别呢？下面举个例子说明：<br><img src="/images/ProtocolBuffer%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/import%E6%83%85%E6%99%AF.png" alt="引用其他 proto 文件"></p>
+<ul>
+<li>在情景1中， my.proto <strong>不能</strong>使用 second.proto 中定义的内容</li>
+<li>在情景2中， my.proto <strong>可以</strong>使用 second.proto 中定义的内容</li>
+<li>情景1和情景2中，my.proto 都可以使用 first.proto</li>
+<li>情景1和情景2中，first.proto 都可以使用 second.proto</li>
+</ul>
+<figure class="highlight protobuf"><table><tr><td class="code"><pre><span class="line"><span class="comment">// my.proto</span></span><br><span class="line"><span class="keyword">import</span> <span class="string">"first.proto"</span>;<span class="number">12</span></span><br><span class="line"><span class="comment">// first.proto</span></span><br><span class="line"><span class="comment">//import "second.proto";</span></span><br><span class="line"><span class="keyword">import</span> public <span class="string">"second.proto"</span>;<span class="number">123</span></span><br><span class="line"><span class="comment">// second.proto</span></span><br><span class="line">...<span class="number">12</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="8-升级-proto-文件"><a href="#8-升级-proto-文件" class="headerlink" title="8) 升级 proto 文件"></a>8) 升级 proto 文件</h4><p>升级更改 proto 需要遵循以下原则</p>
+<ul>
+<li>不要修改任何已存在的变量的 Tag</li>
+<li>如果你新增了变量，新生成的代码依然能解析旧的数据，但新增的变量将会变成默认值。相应的，新代码序列化的数据也能被旧的代码解析，但旧代码会自动忽略新增的变量。</li>
+<li>废弃不用的变量用 reserved 标注</li>
+<li>int32、 uint32、 int64、 uint64 和 bool 是相互兼容的，这意味你可以更改这些变量的类型而不会影响兼容性</li>
+<li>sint32 和 sint64 是兼容的，但跟其他类型不兼容</li>
+<li>string 和 bytes 可以兼容，前提是他们都是UTF-8编码的数据</li>
+<li>fixed32 和 sfixed32 是兼容的, fixed64 和 sfixed64是兼容的</li>
+</ul>
+<h4 id="9-Any-的使用"><a href="#9-Any-的使用" class="headerlink" title="9) Any 的使用"></a>9) Any 的使用</h4><p>Any可以让你在 proto 文件中使用未定义的类型，具体里面保存什么数据，是在上层业务代码使用的时候决定的，使用 Any 必须导入 <code>import google/protobuf/any.proto</code></p>
+<figure class="highlight protobuf"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> <span class="string">"google/protobuf/any.proto"</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">message</span> <span class="title">ErrorStatus</span> </span>&#123;</span><br><span class="line">    <span class="built_in">string</span> <span class="class"><span class="keyword">message</span> = 1;</span></span><br><span class="line"><span class="class">    <span class="title">repeated</span> google.protobuf.Any details = 2;</span></span><br><span class="line"><span class="class">&#125;123456</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="10-Oneof-的使用"><a href="#10-Oneof-的使用" class="headerlink" title="10) Oneof 的使用"></a>10) Oneof 的使用</h4><p>Oneof 类似union，如果你的消息中有很多可选字段，而同一个时刻最多仅有其中的一个字段被设置的话，你可以使用oneof来强化这个特性并且节约存储空间，如</p>
+<figure class="highlight protobuf"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">message</span> <span class="title">LoginReply</span> </span>&#123;</span><br><span class="line">    <span class="keyword">oneof</span> test_oneof &#123;</span><br><span class="line">        <span class="built_in">string</span> name = <span class="number">3</span>;</span><br><span class="line">        <span class="built_in">string</span> age = <span class="number">4</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">required</span> <span class="built_in">string</span> status = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">required</span> <span class="built_in">string</span> token = <span class="number">2</span>;</span><br><span class="line">&#125;<span class="number">12345678</span></span><br></pre></td></tr></table></figure>
+
+<p>这样，name 和 age 都是 LoginReply 的成员，但不能给他们同时设置值（设置一个oneof字段会自动清理其他的oneof字段）。</p>
+<h4 id="11-Maps-的使用"><a href="#11-Maps-的使用" class="headerlink" title="11) Maps 的使用"></a>11) Maps 的使用</h4><p>protobuf 支持定义 map 类型的成员，如：</p>
+<figure class="highlight protobuf"><table><tr><td class="code"><pre><span class="line">map&lt;key_type, value_type&gt; map_field = N;</span><br><span class="line"><span class="comment">// 举例：map&lt;string, Project&gt; projects = 3;12</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>key_type:必须是string或者int</li>
+<li>value_type：任意类型</li>
+</ul>
+<p>使用 map 要注意：</p>
+<ul>
+<li>Map 类型不能使 repeated</li>
+<li>Map 是无序的</li>
+<li>以文本格式展示时，Map 以 key 来排序</li>
+<li>如果有相同的键会导致解析失败</li>
+</ul>
+<h4 id="12-Packages-的使用"><a href="#12-Packages-的使用" class="headerlink" title="12) Packages 的使用"></a>12) Packages 的使用</h4><p>为了防止不同消息之间的命名冲突，你可以对特定的.proto文件提指定 package 名字。在定义消息的成员的时候，可以指定包的名字：</p>
+<figure class="highlight protobuf"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> foo.bar;</span><br><span class="line"><span class="class"><span class="keyword">message</span> <span class="title">Open</span> </span>&#123; ... &#125;<span class="number">12</span></span><br><span class="line"><span class="class"><span class="keyword">message</span> <span class="title">Foo</span> </span>&#123;</span><br><span class="line">    ...</span><br><span class="line">    <span class="comment">// 带上包名</span></span><br><span class="line">    foo.bar.Open open = <span class="number">1</span>;</span><br><span class="line">    ...</span><br><span class="line">&#125;<span class="number">123456</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="13-Options"><a href="#13-Options" class="headerlink" title="13) Options"></a>13) Options</h4><p>Options 分为 file-level options（只能出现在最顶层，不能在消息、枚举、服务内部使用）、 message-level options（只能在消息内部使用）、field-level options（只能在变量定义时使用）</p>
+<ul>
+<li>java_package (file option)：指定生成类的包名，如果没有指定此选项，将由关键字package指定包名。此选项只在生成 java 代码时有效</li>
+<li>java_multiple_files (file option)：如果为 true， 定义在最外层的 message 、enum、service 将作为单独的类存在</li>
+<li>java_outer_classname (file option)：指定最外层class的类名，如果不指定，将会以文件名作为类名</li>
+<li>optimize_for (file option)：可选有 [SPEED|CODE_SIZE|LITE_RUNTIME] ，分别是效率优先、空间优先，第三个lite是兼顾效率和代码大小，但是运行时需要依赖 libprotobuf-lite</li>
+<li>cc_enable_arenas (file option):启动arena allocation，c++代码使用</li>
+<li>objc_class_prefix (file option)：Objective-C使用</li>
+<li>deprecated (field option)：提示变量已废弃、不建议使用</li>
+</ul>
+<figure class="highlight protobuf"><table><tr><td class="code"><pre><span class="line"><span class="keyword">option</span> java_package = <span class="string">"com.example.foo"</span>;</span><br><span class="line"><span class="keyword">option</span> java_multiple_files = <span class="literal">true</span>;</span><br><span class="line"><span class="keyword">option</span> java_outer_classname = <span class="string">"Ponycopter"</span>;</span><br><span class="line"><span class="keyword">option</span> optimize_for = CODE_SIZE;</span><br><span class="line"><span class="built_in">int32</span> old_field = <span class="number">6</span> [deprecated=<span class="literal">true</span>];</span><br></pre></td></tr></table></figure>]]></content>
+  </entry>
+</search>
