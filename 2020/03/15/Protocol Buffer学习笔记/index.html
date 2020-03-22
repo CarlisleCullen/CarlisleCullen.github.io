@@ -118,7 +118,7 @@
 <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   <strong><em>option</em></strong>参数指定了输出的Java类名，即为JavaBean的名字。</p>
 <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   <strong><em>message</em></strong>中的内容为结构体，里面的数据遵循Protocol Buffer的语法格式。</p>
 <p><strong>编译前的必要工作：</strong></p>
-<p>在编译为class文件之前需要将编译器配置好，最佳单的方式就是将protoc.exe文件放到java的bin文件夹中。</p>
+<p>在编译为class文件之前需要将编译器配置好，最佳的方式就是将protoc.exe文件放到java的bin文件夹中。</p>
 <p><strong>编译为java的class文件：</strong></p>
 <p>使用指令：<em>mvn clean install</em>进行编译，编译通过后，定义的.proto结构将会编译为.class文件，传输数据的格式为二进制文件。</p>
 <h4 id="2-序列化数据："><a href="#2-序列化数据：" class="headerlink" title="2) 序列化数据："></a>2) 序列化数据：</h4><p>在可访问权限的包中进行测试，<strong><em>序列化</em></strong>代码如下（Encoding）：</p>
@@ -318,7 +318,7 @@
 <li>以文本格式展示时，Map 以 key 来排序</li>
 <li>如果有相同的键会导致解析失败</li>
 </ul>
-<h4 id="12-Packages-的使用"><a href="#12-Packages-的使用" class="headerlink" title="12) Packages 的使用"></a>12) Packages 的使用</h4><p>为了防止不同消息之间的命名冲突，你可以对特定的.proto文件提指定 package 名字。在定义消息的成员的时候，可以指定包的名字：</p>
+<h4 id="12-Packages-的使用"><a href="#12-Packages-的使用" class="headerlink" title="12) Packages 的使用"></a>12) Packages 的使用</h4><p>为了防止不同消息之间的命名冲突，你可以对特定的.proto文件指定 package 名字。在定义消息的成员的时候，可以指定包的名字：</p>
 <figure class="highlight protobuf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> foo.bar;</span><br><span class="line"><span class="class"><span class="keyword">message</span> <span class="title">Open</span> </span>&#123; ... &#125;<span class="number">12</span></span><br><span class="line"><span class="class"><span class="keyword">message</span> <span class="title">Foo</span> </span>&#123;</span><br><span class="line">    ...</span><br><span class="line">    <span class="comment">// 带上包名</span></span><br><span class="line">    foo.bar.Open open = <span class="number">1</span>;</span><br><span class="line">    ...</span><br><span class="line">&#125;<span class="number">123456</span></span><br></pre></td></tr></table></figure>
 
 <h4 id="13-Options"><a href="#13-Options" class="headerlink" title="13) Options"></a>13) Options</h4><p>Options 分为 file-level options（只能出现在最顶层，不能在消息、枚举、服务内部使用）、 message-level options（只能在消息内部使用）、field-level options（只能在变量定义时使用）</p>
